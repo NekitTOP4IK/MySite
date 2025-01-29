@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>404 Вселенная не здесь</title>
+    <style>
+        body {
+            margin: 0;
+            overflow-x: hidden;
+            background: linear-gradient(-45deg, #0f2027, #203a43, #2c5364);
+            background-size: 400% 400%;
+            height: 100vh;
+            animation: gradient 15s ease infinite;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            font-family: 'Poppins', sans-serif;
+            text-align: center;
+            color: white;
+            position: relative;
+        }
+
+        .particle {
+            position: absolute;
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background: white;
+            pointer-events: none;
+            animation: particleMove 5s linear infinite, particleColor 5s linear infinite;
+        }
+
+        @keyframes particleMove {
+            0% { transform: translateY(0) translateX(0) scale(1); opacity: 1; }
+            100% { transform: translateY(100vh) translateX(calc(50vw * (var(--x-dir, 1)))) scale(0.5); opacity: 0; }
+        }
+
+        @keyframes particleColor {
+            0% { background: hsl(0, 100%, 50%); }
+            25% { background: hsl(60, 100%, 50%); }
+            50% { background: hsl(120, 100%, 50%); }
+            75% { background: hsl(240, 100%, 50%); }
+            100% { background: hsl(300, 100%, 50%); }
+        }
+
+        .glitch-container {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .glitch {
+            font-size: 3.5em;
+            text-shadow: 0.05em 0 0 rgba(255,0,0,.75),
+                        -0.025em -0.05em 0 rgba(0,255,0,.75),
+                        0.025em 0.05em 0 rgba(0,0,255,.75);
+            animation: glitch 500ms infinite;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .glitch::before,
+        .glitch::after {
+            content: attr(data-text);
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            filter: blur(5px);
+        }
+
+        .glitch::before {
+            text-shadow: -0.05em 0 0 rgba(255,0,0,.75),
+                        0.025em 0.05em 0 rgba(0,255,0,.75),
+                        -0.025em -0.05em 0 rgba(0,0,255,.75);
+            animation: glitch 300ms infinite;
+        }
+
+        .glitch::after {
+            text-shadow: 0.05em 0 0 rgba(0,255,0,.75),
+                        -0.025em -0.05em 0 rgba(0,0,255,.75),
+                        0.025em 0.05em 0 rgba(255,0,0,.75);
+            animation: glitch 200ms infinite;
+        }
+
+        .video-wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 60vw;
+            height: 33.75vw;
+            max-width: 560px;
+            max-height: 315px;
+            overflow: hidden;
+            border-radius: 15px;
+            box-shadow: 0 0 50px rgba(255,255,255,0.5), 0 0 100px rgba(255, 100, 255, 0.4);
+            transition: transform 0.3s;
+            margin-top: 20px;
+        }
+
+        .video-wrapper:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 70px rgba(255,255,255,0.7), 0 0 120px rgba(255, 150, 255, 0.6);
+        }
+
+        .enter-button {
+            padding: 15px 40px;
+            font-size: 1.8em;
+            background: linear-gradient(45deg, #ff416c, #ff4b2b);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: 0.3s, transform 0.2s ease-in-out;
+            box-shadow: 0px 5px 15px rgba(255, 65, 108, 0.4);
+            animation: buttonPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes buttonPulse {
+            0% { transform: scale(1); box-shadow: 0px 5px 15px rgba(255, 65, 108, 0.4);}
+            50% { transform: scale(1.1); box-shadow: 0px 10px 25px rgba(255, 65, 108, 0.6);}
+            100% { transform: scale(1); box-shadow: 0px 5px 15px rgba(255, 65, 108, 0.4);}
+        }
+
+        .enter-button:hover {
+            background: linear-gradient(45deg, #ff4b2b, #ff416c);
+            transform: scale(1.1) translateY(-5px);
+            box-shadow: 0px 10px 25px rgba(255, 65, 108, 0.6);
+        }
+
+        .widget-container {
+            display: none;
+            margin-top: 50px;
+            width: 80%;
+            height: 600px;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 0 50px rgba(255,255,255,0.5);
+        }
+
+        /* Стили для сайдбара */
+        .sidebar {
+            position: fixed;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0, 0, 0, 0.8);
+            padding: 25px;
+            border-radius: 20px;
+            border: 2px solid transparent;
+            animation: borderGlow 3s linear infinite;
+            box-shadow: 0 0 30px rgba(255,255,255,0.4);
+            z-index: 1000;
+            backdrop-filter: blur(8px);
+            min-width: 250px;
+        }
+
+        .sidebar h2 {
+            color: #fff;
+            text-align: center;
+            margin: 0 0 25px 0;
+            font-size: 1.5em;
+            animation: textGlow 2s ease-in-out infinite;
+        }
+
+        .player-controls {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .player-button {
+            padding: 12px 20px;
+            font-size: 1.1em;
+            background: linear-gradient(45deg, #e74c3c, #c0392b);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .player-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                90deg,
+                transparent,
+                rgba(255,255,255,0.3),
+                transparent
+            );
+            transition: 0.5s;
+        }
+
+        .player-button:hover::before {
+            left: 100%;
+        }
+
+        .input-control {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .video-input {
+            padding: 12px;
+            font-size: 1em;
+            border: 2px solid #4CAF50;
+            border-radius: 8px;
+            background: rgba(255,255,255,0.1);
+            color: white;
+            transition: all 0.3s ease;
+        }
+
+        .video-input:focus {
+            border-color: #2ecc71;
+            box-shadow: 0 0 15px rgba(46, 204, 113, 0.5);
+            outline: none;
+        }
+
+        .play-button {
+            padding: 12px 25px;
+            font-size: 1.1em;
+            background: linear-gradient(45deg, #2ecc71, #3498db);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .play-button:hover {
+            background: linear-gradient(45deg, #3498db, #2ecc71);
+            box-shadow: 0 0 20px rgba(46, 204, 113, 0.5);
+        }
+
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        @keyframes glitch {
+            0% { transform: translate(0); }
+            20% { transform: translate(-2px, 2px); }
+            40% { transform: translate(-2px, -2px); }
+            60% { transform: translate(2px, 2px); }
+            80% { transform: translate(2px, -2px); }
+            100% { transform: translate(0); }
+        }
+
+        @keyframes borderGlow {
+            0% { border-color: #ff0000; box-shadow: 0 0 40px rgba(255,0,0,0.4); }
+            33% { border-color: #00ff00; box-shadow: 0 0 40px rgba(0,255,0,0.4); }
+            66% { border-color: #0000ff; box-shadow: 0 0 40px rgba(0,0,255,0.4); }
+            100% { border-color: #ff0000; box-shadow: 0 0 40px rgba(255,0,0,0.4); }
+        }
+
+        @keyframes textGlow {
+            0% { text-shadow: 0 0 10px rgba(255,255,255,0.7); }
+            50% { text-shadow: 0 0 20px rgba(255,255,255,0.9); }
+            100% { text-shadow: 0 0 10px rgba(255,255,255,0.7); }
+        }
+    </style>
+</head>
+<body>
+    <button class="enter-button" onclick="enterSite()">Войти</button>
+    
+    <div class="glitch-container" id="content">
+        <h1 class="glitch" data-text="Тут ничего нет Идите нахуй, пожалуйста!">Тут ничего нет<br>Идите нахуй, пожалуйста!</h1>
+        <div class="video-wrapper">
+            <iframe 
+                id="rickroll"
+                width="100%" 
+                height="100%" 
+                frameborder="0" 
+                allow="autoplay; encrypted-media; picture-in-picture" 
+                allowfullscreen>
+            </iframe>
+        </div>
+
+        <div class="sidebar">
+            <h2>Управление плеером</h2>
+            <div class="player-controls">
+                <button class="player-button" onclick="changeVideo('uvYDiQreplU')">Видео 1</button>
+                <button class="player-button" onclick="changeVideo('a_FhxgvEokg')">Видео 2</button>
+                <button class="player-button" onclick="changeVideo('QKxYjiS2RFE')">Видео 3</button>
+                <button class="player-button" onclick="changeVideo('eGlNzYy6aYs')">Видео 4</button>
+            </div>
+            <div class="input-control">
+                <input type="text" id="videoUrlInput" class="video-input" 
+                       placeholder="Вставьте ссылку на YouTube видео">
+                <button class="play-button" onclick="playCustomVideo()">Воспроизвести</button>
+            </div>
+        </div>
+
+        <div class="widget-container" id="widget">
+            <iframe 
+                src="https://pikuco.ru/tests/32928/" 
+                width="100%" 
+                height="100%" 
+                frameborder="0" 
+                allowfullscreen>
+            </iframe>
+        </div>
+    </div>
+
+    <script>
+        function createParticle() {
+            const particle = document.createElement('div');
+            particle.classList.add('particle');
+            particle.style.left = Math.random() * 100 + 'vw';
+            particle.style.top = '-20px';
+            particle.style.setProperty('--x-dir', (Math.random() < 0.5 ? -1 : 1));
+            document.body.appendChild(particle);
+            particle.addEventListener('animationend', () => particle.remove());
+        }
+        setInterval(createParticle, 200);
+        
+        function enterSite() {
+            document.querySelector('.enter-button').style.display = 'none';
+            document.getElementById('content').style.display = 'flex';
+            document.getElementById('rickroll').src = "https://www.youtube.com/embed/uvYDiQreplU?autoplay=1&loop=1&playlist=uvYDiQreplU";
+            setTimeout(() => {
+                document.getElementById('widget').style.display = 'block';
+                window.scrollBy({ top: 400, behavior: 'smooth' });
+            }, 8000);
+        }
+        
+        function changeVideo(videoId) {
+            document.getElementById('rickroll').src = `https://www.youtube.com/embed/${videoId}?autoplay=1&loop=1&playlist=${videoId}`;
+        }
+        
+        function playCustomVideo() {
+            const videoUrl = document.getElementById('videoUrlInput').value;
+            const videoId = extractVideoId(videoUrl);
+            
+            if(videoId) {
+                changeVideo(videoId);
+            } else {
+                alert("Пожалуйста, введите корректную ссылку на YouTube видео!");
+            }
+        }
+
+        function extractVideoId(url) {
+            const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+            const match = url.match(regExp);
+            return (match && match[2].length === 11) ? match[2] : null;
+        }
+    </script>
+</body>
+</html>
