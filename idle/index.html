@@ -22,18 +22,12 @@
         }
 
         .particle {
-            position: absolute;
-            width: 5px;
-            height: 5px;
-            border-radius: 50%;
-            background: white;
-            pointer-events: none;
-            animation: particleMove 5s linear infinite, particleColor 5s linear infinite;
+            animation: particleMove 4s linear forwards;
         }
 
         @keyframes particleMove {
             0% { transform: translateY(0) translateX(0) scale(1); opacity: 1; }
-            100% { transform: translateY(100vh) translateX(calc(50vw * (var(--x-dir, 1)))) scale(0.5); opacity: 0; }
+            100% { transform: translateY(100vh) translateX(calc(30vw * var(--x-dir))) scale(0.3); opacity: 0; }
         }
 
         @keyframes particleColor {
@@ -317,16 +311,31 @@
     </div>
 
     <script>
-        function createParticle() {
-            const particle = document.createElement('div');
-            particle.classList.add('particle');
-            particle.style.left = Math.random() * 100 + 'vw';
-            particle.style.top = '-20px';
-            particle.style.setProperty('--x-dir', (Math.random() < 0.5 ? -1 : 1));
-            document.body.appendChild(particle);
-            particle.addEventListener('animationend', () => particle.remove());
-        }
-        setInterval(createParticle, 200);
+        const MAX_PARTICLES = 50;
+        let particlesCount = 0;
+    
+        // function createParticle() {
+        //     if (particlesCount >= MAX_PARTICLES) return;
+            
+        //     const particle = document.createElement('div');
+        //     particle.classList.add('particle');
+        //     particle.style.left = Math.random() * 100 + 'vw';
+        //     particle.style.top = '-20px';
+        //     particle.style.setProperty('--x-dir', (Math.random() < 0.5 ? -1 : 1));
+            
+        //     particle.addEventListener('animationend', () => {
+        //         particle.remove();
+        //         particlesCount--;
+        //     });
+    
+        //     document.body.appendChild(particle);
+        //     particlesCount++;
+        // }
+    
+        // Увеличиваем интервал создания частиц и добавляем случайную задержку
+        // setInterval(() => {
+        //     createParticle();
+        // }, 300 + Math.random() * 200);
         
         function enterSite() {
             document.querySelector('.enter-button').style.display = 'none';
